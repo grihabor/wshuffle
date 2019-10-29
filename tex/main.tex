@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
 \usepackage[T1]{fontenc}
+\usepackage{amsmath}
 
 \title{Weighted shuffle}
 \date{2019-10-17}
@@ -21,7 +22,7 @@
     Необходимо реализовать алгоритм weighted shuffle, который получает $n$~элементов на вход,
     соответствующие веса $w_i, 1\leq{}i\leq{}n,$ и возвращает полученный список элементов в некотором порядке.
     Обозначим вероятность того, что $k$-й элемент окажется на $j$-м месте $O_{k,j}$. Тогда должно быть верно
-    $$O_{k,1}=\frac{w_k}{\sum_{i=1}^{n} w_i}, 1\leq{}k\leq{}n,$$
+    $$O_{k,1}=\frac{w_k}{\sum_{i=1}^{n} w_i},1\leq{}k\leq{}n,$$
     то есть вероятность оказаться на первом месте для элемента с весом $w_k$ равна отношению этого веса
     к сумме весов всех элементов.
 
@@ -45,6 +46,81 @@
 
     \section{Доказательство}
 
+    Совместное распределение $n$ независимых случайных величин с экспоненциальными распределениеми
+    с параметрами $\lambda_i, 1\leq{}i\leq{}n,$ равно
+    \begin{equation}
+    f_{X_1,...,X_n}(x_1,...,x_n)
+    =\lambda_{1}e^{-\lambda_{1}x_{1}}...\lambda_{n}e^{-\lambda_{n}x_{n}}
+    \end{equation}
 
+    Посчитаем вероятность события
+    \begin{equation}
+    \begin{split}
+    &P(X_1<X_i\;\forall{i}\in{[2,n]})= \\
+&=
+    \idotsint\displaylimits_{x_1<x_i\;\forall{i}\in{[2,n]}}
+    f_{X_1,...,X_n}(x_1,...,x_n)
+    \,dx_1\dots{}dx_n= \\
+&=
+    \int\displaylimits_{0}^{+\infty}
+    \int\displaylimits_{x_1}^{+\infty}
+    ...
+    \int\displaylimits_{x_1}^{+\infty}
+    f_{X_1,...,X_n}(x_1,...,x_n)
+    \,dx_n\dots{}dx_1= \\
+&=
+    \int\displaylimits_{0}^{+\infty}
+    \int\displaylimits_{x_1}^{+\infty}
+    ...
+    \int\displaylimits_{x_1}^{+\infty}
+    \lambda_{1}e^{-\lambda_{1}x_{1}}...\lambda_{n}e^{-\lambda_{n}x_{n}}
+    \,dx_n\dots{}dx_1= \\
+&=
+    \int\displaylimits_{0}^{+\infty}
+    \lambda_{1}e^{-\lambda_{1}x_{1}}
+    (
+    \int\displaylimits_{x_1}^{+\infty}
+    \lambda_{2}e^{-\lambda_{2}x_{2}}
+    dx_2
+    )...(
+    \int\displaylimits_{x_1}^{+\infty}
+    \lambda_{n}e^{-\lambda_{n}x_{n}}
+    dx_n
+    )
+    dx_1= \\
+&=
+    \int\displaylimits_{0}^{+\infty}
+    \lambda_{1}e^{-\lambda_{1}x_{1}}
+    (
+    \frac{\lambda_{2}}{-\lambda_{2}}e^{-\lambda_{2}x_{2}}
+    \bigg\rvert_{x_1}^{+\infty}
+    )...(
+    \frac{\lambda_{n}}{-\lambda_{n}}e^{-\lambda_{n}x_{n}}
+    \bigg\rvert_{x_1}^{+\infty}
+    )
+    dx_1= \\
+&=
+    \int\displaylimits_{0}^{+\infty}
+    \lambda_{1}e^{-\lambda_{1}x_{1}}
+    (
+    e^{-\lambda_{2}x_{1}}
+    )...(
+    e^{-\lambda_{n}x_{1}}
+    )
+    dx_1= \\
+&=
+    \lambda_{1}
+    \int\displaylimits_{0}^{+\infty}
+    e^{-(\lambda_{1} + \lambda_{2} + ... + \lambda_{n})x_{1}}
+    dx_1= \\
+&=
+    \frac{\lambda_{1}}{\lambda_{1} + \lambda_{2} + ... + \lambda_{n}}
+    \end{split}
+    \end{equation}
+
+    Заметим, что аналогичные рассуждения будут верны не только для $X_1$, но и для $X_k$, а значит
+    \begin{equation}
+
+    \end{equation}
 
 \end{document}
